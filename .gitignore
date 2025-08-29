@@ -1,0 +1,11 @@
+*
+!.gitignore
+!Readme.md
+
+!scripts/
+!scripts/**
+
+!src/
+!src/**
+
+!config.json
