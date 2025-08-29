@@ -7,3 +7,6 @@
 
 !src/
 !src/**
+
+# ignore all pycache folders and files
+*.pyc
