@@ -58,9 +58,9 @@ class StereoDataFolderStructure:
         """
         Check that the folder has two subfolders named camera_1 and camera_2 each with a video.mp4 file
         Check that the folder has a parameters.yml file
-        Check that the folder has a calibration_extrinsics_pattern_specs.yml file
+        Check that the folder has a extrinsics_calibration_pattern_specs.yml file
         """        
-        expected_files = ["parameters.yml", "calibration_extrinsics_pattern_specs.yml"]
+        expected_files = ["parameters.yml", "extrinsics_calibration_pattern_specs.yml"]
         expected_folders = ["camera_1", "camera_2"]
         
         actual_files = [f for f in os.listdir(folder_path) if f not in [".DS_Store"]]
@@ -81,8 +81,8 @@ class StereoDataFolderStructure:
         # check that the parameters.yml file exists
         assert os.path.isfile(os.path.join(folder_path, "parameters.yml"))
         
-        # check that the calibration_extrinsics_pattern_specs.yml file exists
-        assert os.path.isfile(os.path.join(folder_path, "calibration_extrinsics_pattern_specs.yml"))
+        # check that the extrinsics_calibration_pattern_specs.yml file exists
+        assert os.path.isfile(os.path.join(folder_path, "extrinsics_calibration_pattern_specs.yml"))
         
     def _check_calibration_intrinsics_folder_structure(self, folder_path):
         """
@@ -101,7 +101,7 @@ class StereoDataFolderStructure:
         assert self._check_folder_has_one_video_file(os.path.join(folder_path, "camera_1"))
         assert self._check_folder_has_one_video_file(os.path.join(folder_path, "camera_2"))
         
-        # assert each camera folder has a pattern_specs.yml file
+        # assert each camera folder has a checkerboard_specs.yml file
         assert os.path.isfile(os.path.join(folder_path, "camera_1", "checkerboard_specs.yml")), f"checkerboard specs file not found in {os.path.join(folder_path, 'camera_1')}"
         assert os.path.isfile(os.path.join(folder_path, "camera_2", "checkerboard_specs.yml")), f"checkerboard specs file not found in {os.path.join(folder_path, 'camera_2')}"
     
@@ -124,11 +124,12 @@ class StereoDataFolderStructure:
                 raise ValueError(f"Subfolder {subfolder} has an invalid name")
         print(f"{name} folder structure valid")
 
-class Scene(StereoDataFolderStructure):
+class SceneFolderStructure(StereoDataFolderStructure):
     '''
     It is also a stereo data folder structure, it has a scene_name attribute and will ignore all other scenes and non related calibration folders
     '''
     def __init__(self, folder_path, scene_name):
+        assert scene_name is not None, "Scene name is required"
         super().__init__(folder_path)
         self.scene_name = scene_name
         self.admitted_folder_names = [scene_name, self.get_calibration_intrinsics_folder_name()]
@@ -148,19 +149,17 @@ def load_stereo_data_folder_structure() -> StereoDataFolderStructure:
     stereo_data_folder_structure = StereoDataFolderStructure(STEREO_DATA_FOLDER_NAME)
     return stereo_data_folder_structure
 
-def load_scene_folder_structure() -> Scene:
+def load_scene_folder_structure(scene_name: str = None) -> SceneFolderStructure:
     """
     Load the scene folder structure from the config.json file.
     """
     with open("config.json", "r") as f:
         config = json.load(f)
     STEREO_DATA_FOLDER_NAME = config["stereo_data_folder_name"]
-    SCENE_NAME = config["scene_name"]
-    scene_folder_structure = Scene(STEREO_DATA_FOLDER_NAME, SCENE_NAME)
+    scene_folder_structure = SceneFolderStructure(STEREO_DATA_FOLDER_NAME, scene_name)
     return scene_folder_structure
 
-
 if __name__ == "__main__":
-    scene_folder_structure = load_scene_folder_structure()
-    data_folder_structure = load_stereo_data_folder_structure()
-    
+    with open("config.json", "r") as f:
+        scene_name = json.load(f)["scene_name"]
+    scene_folder_structure = load_scene_folder_structure(scene_name)

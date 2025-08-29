@@ -27,3 +27,4 @@ Your folder structure should match the following :
 1. Put your data folder name in config.json and check your structure by running 
 
 `bash scripts/check_folder_structure.sh`
+

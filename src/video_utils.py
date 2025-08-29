@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import os
 from typing import Tuple
+import subprocess
 
 class FrameExtractor:
     def __init__(self, video_path: str, output_dir: str, list_of_frames: list[int]):
