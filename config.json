@@ -1,4 +1,5 @@
 {
     "stereo_data_folder_name": "stereo_michel_24_08_2025",
+    "temporal_calib_step_sec":0.5,
     "scene_name": "scene_3"
 }
