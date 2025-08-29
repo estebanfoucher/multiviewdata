@@ -1,30 +1,54 @@
-This repo aims to check preprocess multi-view data.
+# Multi-View Data Preprocessing
 
-Aims :
-- organize data
-- get cameras intrinsincs and extrinsics
-- syncronize videos
+This repo aims to preprocess multi-view data.
 
-Your folder structure should match the following :
+## Aims
+- Organize data
+- Get cameras intrinsics and extrinsics
+- Synchronize videos
 
-- stereo_data_folder/
-  - scene_x/
-    - camera_1/
-      - video.mp4
-    - camera_2/
-      - video.mp4
-    - parameters.yml
-    - calibration_extrinsics_pattern_specs.yml
-  - calibration_intrinsics_x/
-    - camera_1/
-      - video.mp4
-      - pattern_specs.yml
-    - camera_2/
-      - video.mp4
-      - pattern_specs.yml
+## Installation
 
+1. Create virtual environment:
+   ```bash
+   virtualenv .venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   ```
 
-1. Put your data folder name in config.json and check your structure by running 
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-`bash scripts/check_folder_structure.sh`
+## Usage
+
+Your folder structure should match the following:
+
+```
+stereo_data_folder/
+├── scene_x/
+│   ├── camera_1/
+│   │   └── video.mp4
+│   ├── camera_2/
+│   │   └── video.mp4
+│   ├── parameters.yml
+│   └── extrinsics_calibration_pattern_specs.yml
+└── calibration_intrinsics_x/
+    ├── camera_1/
+    │   ├── video.mp4
+    │   └── checkerboard_specs.yml
+    └── camera_2/
+        ├── video.mp4
+        └── checkerboard_specs.yml
+```
+
+1. Put your data folder name in `config.json`
+2. Check your structure by running:
+   ```bash
+   bash scripts/check_folder_structure.sh
+   ```
+3. Run the main script:
+   ```bash
+   python src/main.py
+   ```
 
